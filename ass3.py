@@ -30,7 +30,7 @@ def word2vec():
     reviews = pos_revs + neg_revs
     preprocessed_reviews = [gensim.utils.simple_preprocess(review) for review in reviews]
     # print(preprocessed_reviews)
-    model = gensim.models.Word2Vec(sentences=preprocessed_reviews, vector_size=100, window=5, workers=4)
+    model = gensim.models.Word2Vec(sentences=preprocessed_reviews, vector_size=2000, window=10, epochs=60, )
     model.save('model.model')
     # model = Word2Vec.load('model.model')
     # feature_vectors = model.wv.vectors
@@ -64,7 +64,7 @@ def create_model():
     scalar.fit(x_train)
     x_train = scalar.transform(x_train)
     x_test = scalar.transform(x_test)
-    model = svm.SVC(C=1)
+    model = LogisticRegression(C=1, solver='liblinear')
     model.fit(x_train, y_train)
     joblib.dump(model, 'model.pkl')
     train_acc = model.score(x_train, y_train)
@@ -90,3 +90,7 @@ print(create_model())
 # logistic (0.778125, 0.6825) c=1 , (0.775, 0.685) c=0.9,(0.77375, 0.6775) c=0.5,(0.771875, 0.6875) c=0.7, word2vec => vector_size=100, window=5
 # svm (0.830625, 0.6775) c=1,(0.823125, 0.675) c=0.9  word2vec => vector_size=100, window=5
 # naive_bias (0.61125, 0.6) word2vec => vector_size=100, window=5
+
+# logistic (0.99875, 0.815) C=1, solver=liblinear word2vec => vector_size=2000, window=10, epochs=60
+# svm (0.97, 0.82) C=1 word2vec => vector_size=2000, window=10, epochs=60
+
